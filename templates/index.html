@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSim: Patient Data Input</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f39c12;
+            --background-color: #f4f4f9;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            z-index: -1;
+            filter: blur(20px);
+            border-radius: 20px;
+            opacity: 0.7;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"],
+        select,
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus,
+        select:focus,
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.3);
+            outline: none;
+        }
+
+        fieldset {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        fieldset:hover {
+            border-color: var(--primary-color);
+        }
+
+        legend {
+            font-weight: 600;
+            color: var(--primary-color);
+            padding: 0 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group label {
+            margin: 0;
+            padding: 0.5rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-group input[type="radio"]:checked + label {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .fadeInUp {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fadeInUp.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+
+        .floating-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .form-group:hover .tooltip {
+            opacity: 1;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .symptom-severity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .symptom-severity input[type="range"] {
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+
+        .symptom-severity span {
+            font-weight: bold;
+            min-width: 30px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: document.querySelector('.container'),
+                threshold: 0.1
+            });
+
+            document.querySelectorAll('.fadeInUp').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Progress bar
+            const progressBar = document.querySelector('.progress-bar');
+            const container = document.querySelector('.container');
+            container.addEventListener('scroll', () => {
+                const scrollPercentage = (container.scrollTop / (container.scrollHeight - container.clientHeight)) * 100;
+                progressBar.style.width = `${scrollPercentage}%`;
+            });
+
+            // Floating button
+            const floatingButton = document.querySelector('.floating-button');
+            floatingButton.addEventListener('click', () => {
+                container.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // Form validation and submission
+           
+            // Symptom severity slider
+            const severitySlider = document.getElementById('symptom-severity');
+            const severityValue = document.getElementById('severity-value');
+            severitySlider.addEventListener('input', () => {
+                severityValue.textContent = severitySlider.value;
+            });
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="progress-bar"></div>
+    <div class="container">
+        <h1 class="pulse">HealthSim: Patient Data Input</h1>
+        <form action="http://localhost:8000/submit-data" method="POST">
+            <div class="form-group fadeInUp">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" min="0" required>
+                <div class="tooltip">Enter your current age</div>
+            </div>
+            
+            <div class="form-group fadeInUp">
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" min="0" step="0.1" required>
+                <div class="tooltip">Enter your weight in kilograms</div>
+            </div>
+
+            <div class="form-group fadeInUp">
+                <label for="lifestyle">Lifestyle Choices:</label>
+                <select id="lifestyle" name="lifestyle" required>
+                    <option value="">Select one</option>
+                    <option value="active">Active</option>
+                    <option value="moderate">Moderate</option>
+                    <option value="sedentary">Sedentary</option>
+                </select>
+                <div class="tooltip">Choose your typical lifestyle</div>
+            </div>
+            
+            <fieldset class="fadeInUp">
+                <legend>Do you smoke?</legend>
+                <div class="radio-group">
+                    <input type="radio" id="smoking-yes" name="smoking" value="yes" required>
+                    <label for="smoking-yes">Yes</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="smoking-no" name="smoking" value="no" required>
+                    <label for="smoking-no">No</label>
+                </div>
+            </fieldset>
+
+            <fieldset class="fadeInUp">
+                <legend>Alcohol Consumption:</legend>
+                <div class="form-group">
+                    <label for="alcohol consumption">Alcohol Consumption:</label>
+                    <textarea id="alcohol consumption" name="alcohol consumption" placeholder="Please enter how much alcohol you drink daily (in oz)"></textarea>
+                </div>
+            </fieldset>
+
+            <fieldset class="fadeInUp">
+                <legend>Lifestyle Factors:</legend>
+                <div class="form-group">
+                    <label for="exercise">Exercise Frequency:</label>
+                    <input type="text" id="exercise" name="exercise" required>
+                    <div class="tooltip">How often do you exercise?</div>
+                </div>
+                <div class="form-group">
+                    <label for="diet">Diet Type:</label>
+                    <input type="text" id="diet" name="diet" required>
+                    <div class="tooltip">Describe your typical diet</div>
+                </div>
+                <div class="form-group">
+                    <label for="sleep">Sleep Duration (hours per night):</label>
+                    <input type="number" id="sleep" name="sleep" min="0" max="24" step="0.5" required>
+                    <div class="tooltip">Average hours of sleep per night</div>
+                </div>
+            </fieldset>
+
+            <fieldset class="fadeInUp">
+                <legend>Family History:</legend>
+                <div class="form-group">
+                    <label>Select all that apply:</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="family_history[]" value="heart_disease"> Heart Disease</label>
+                        <label><input type="checkbox" name="family_history[]" value="diabetes"> Diabetes</label>
+                        <label><input type="checkbox" name="family_history[]" value="cancer"> Cancer</label>
+                        <label><input type="checkbox" name="family_history[]" value="hypertension"> Hypertension</label>
+                        <label><input type="checkbox" name="family_history[]" value="stroke"> Stroke</label>
+                        <label><input type="checkbox" name="family_history[]" value="mental_illness"> Mental Illness</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="family_history_details">Additional Details:</label>
+                    <textarea id="family_history_details" name="family_history_details" placeholder="Please provide any additional information about your family's medical history"></textarea>
+                </div>
+            </fieldset>
+
+            <fieldset class="fadeInUp">
+                <legend>Current Symptoms:</legend>
+                <div class="form-group">
+                    <label for="current_symptoms">Describe your current symptoms:</label>
+                    <textarea id="current_symptoms" name="current_symptoms" required placeholder="e.g., headache, fatigue, shortness of breath"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="symptom-severity">Symptom Severity:</label>
+                    <div class="symptom-severity">
+                        <span>Mild</span>
+                        <input type="range" id="symptom-severity" name="symptom_severity" min="1" max="10" value="5">
+                        <span>Severe</span>
+                        <span id="severity-value">5</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="symptom_duration">Symptom Duration:</label>
+                    <input type="text" id="symptom_duration" name="symptom_duration" required placeholder="e.g., 2 days, 1 week">
+                </div>
+            </fieldset>
+
+            <div class="form-group fadeInUp">
+                <label for="condition">Enter Condition:</label>
+                <input type="text" id="condition" name="condition" required>
+                <div class="tooltip">Any specific health conditions?</div>
+            </div>
+
+            <button type="submit" class="fadeInUp">Submit</button>
+        </form>
+    </div>
+    <button class="floating-button">↑</button>
+</body>
+</html>
