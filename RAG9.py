@@ -26,7 +26,7 @@ import seaborn as sns
 import pandas as pd
 
 # set streamlit config at top to avoid error
-st.set_page_config(page_title="HealthSim: Advanced Patient Matching System", layout="wide")
+st.set_page_config(page_title="DocConnect: Advanced Patient Matching System", layout="wide")
 
 # I always get this error coming up in terminal...
 warnings.simplefilter(action='ignore', category=FutureWarning)
@@ -330,7 +330,7 @@ def main():
         unsafe_allow_html=True
     )
 
-    st.title("🩺 HealthSim: Advanced Patient Matching System")
+    st.title("🩺 DocConnect: Advanced Patient Matching System")
 
     # user authentication
     if not st.session_state.logged_in:
@@ -750,9 +750,9 @@ def main():
                         st.error("Patient data not found.")
 
         elif selection == "About":
-            st.header("About HealthSim")
+            st.header("About DocConnect")
             st.write("""
-                **HealthSim** is a product developed by Preetham Manapuri, Neil Raman, Jack London, and Anthony Xu
+                **DocConnect** is a product developed by Preetham Manapuri, Neil Raman, Jack London, and Anthony Xu
             """)
 
             st.subheader("Key Features")
